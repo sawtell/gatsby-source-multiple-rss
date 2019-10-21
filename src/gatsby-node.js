@@ -51,12 +51,12 @@ exports.sourceNodes = async ({
   actions,
   createNodeId
 }, {
-  url,
+  urls,
   name,
   parserOption = {}
 }) => {
-  if (!url) {
-    throw new Error('url is required.')
+  if (!urls) {
+    throw new Error('urls is required.')
   }
 
   if (!name) {
@@ -66,20 +66,44 @@ exports.sourceNodes = async ({
   const { createNode } = actions
   const parser = new Parser(parserOption)
 
-  const feed = await parser.parseURL(url)
-  feed.items.forEach(item => {
-    const nodeId = createNodeId(item.link)
-    const normalizedItem = normalize(item)
-    renameSymbolKeys(normalizedItem)
-    createNode({
-      ...normalizedItem,
-      id: nodeId,
-      parent: null,
-      children: [],
-      internal: {
-        contentDigest: createContentDigest(item),
-        type: `Feed${name}`
-      }
-    })
-  })
+  const mapLoop = async _ => {
+    const promises = urls.map(async url => {
+      return await parser.parseURL(url);
+    });
+    const feeds = await Promise.all(promises);
+    feeds.forEach(feed => {
+      // Clone the feed object
+      const feedMeta = JSON.parse(JSON.stringify(feed));
+      delete feedMeta.items;
+      const normalizedMeta = normalize(feedMeta);
+      renameSymbolKeys(normalizedMeta);
+      let feedChildren = [];
+      feed.items.forEach(item => {
+        const nodeId = createNodeId(item.link);
+        feedChildren.push(nodeId);
+        const normalizedItem = normalize(item);
+        renameSymbolKeys(normalizedItem);
+        createNode({ ...normalizedItem,
+          id: nodeId,
+          parent: null,
+          children: [],
+          internal: {
+            contentDigest: createContentDigest(item),
+            type: `Feed${name}Items`
+          }
+        });
+      });
+      createNode({ ...normalizedMeta,
+        id: createNodeId(feedMeta.feedUrl),
+        parent: null,
+        children: feedChildren,
+        internal: {
+          contentDigest: createContentDigest(feedMeta),
+          type: `Feed${name}`
+        }
+      });
+    });
+  };
+
+  await mapLoop();
 }

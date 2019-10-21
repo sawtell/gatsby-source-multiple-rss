@@ -1,7 +1,7 @@
 {
-  "name": "gatsby-source-rss-feed",
+  "name": "gatsby-source-multiple-rss",
   "version": "1.1.1",
-  "description": "Gatsby source plugin for rss feed",
+  "description": "Gatsby source plugin for multiple rss feeds",
   "main": "gatsby-node.js",
   "scripts": {
     "build": "babel src --out-dir .",
@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/mottox2/gatsby-source-rss-feed.git"
+    "url": "https://github.com/sawtell/gatsby-source-multiple-rss.git"
   },
   "keywords": [
     "gatsby",
@@ -27,5 +27,5 @@
     "lodash": "^4.17.11",
     "rss-parser": "^3.6.2"
   },
-  "homepage": "https://github.com/mottox2/gatsby-source-rss-feed"
+  "homepage": "https://github.com/sawtell/gatsby-source-multiple-rss"
 }

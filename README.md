@@ -1,19 +1,18 @@
 # gatsby-source-rss-feed
 
-[![npm version](https://badge.fury.io/js/gatsby-source-rss-feed.svg)](https://badge.fury.io/js/gatsby-source-rss-feed)
 
 Source plugin for pulling data into Gatsby from RSS feed.
 
 ## Install
 
 ```bash
-npm install --save gatsby-source-rss-feed
+npm install --save gatsby-source-mutiple-rss
 ```
 
 or
 
 ```bash
-yarn add gatsby-source-rss-feed
+yarn add gatsby-source-multiple-rss
 ```
 
 ## How to use
@@ -23,9 +22,9 @@ yarn add gatsby-source-rss-feed
 module.exports = {
   plugins: [
     {
-      resolve: `gatsby-source-rss-feed`,
+      resolve: `gatsby-source-multiple-rss`,
       options: {
-        url: `https://www.gatsbyjs.org/blog/rss.xml`,
+        urls: [`https://www.gatsbyjs.org/blog/rss.xml`],
         name: `GatsbyBlog`,
         // Optional
         // Read parser document: https://github.com/bobby-brennan/rss-parser#readme
